@@ -71,8 +71,8 @@ function App() {
   }
 
   return (
-    <div className='p-5 lg:pt-20'>
-      <div className='max-w-2xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-5xl p-8 flex flex-col'>
+    <div className='p-4 lg:pt-20'>
+      <div className='max-w-xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-5xl p-4 md:p-8 flex flex-col'>
         {/* Here there is conditional rendering - once a date has been confirmed, the UI changes to a success message */}
         {!dateSubmitted.submitted ? (
           <>
@@ -82,7 +82,7 @@ function App() {
                   <img
                     src={calendar.owner.imageURL}
                     alt={calendar.owner.name}
-                    className='rounded-full shadow-md mr-4 border-2 md:w-20'
+                    className='rounded-full shadow-md mr-4 border-2 w-20 md:w-20 max-h-20'
                   />
                   <div className='flex flex-col grow justify-between'>
                     <h3>Find a day that {calendar.owner.name} is available</h3>
