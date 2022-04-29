@@ -177,6 +177,7 @@ function App() {
               selectedTime={selectedTime}
               appointments={calendar.appointments}
               setDateSubmitted={setDateSubmitted}
+              owner={calendar.owner}
             />
           </>
         ) : (

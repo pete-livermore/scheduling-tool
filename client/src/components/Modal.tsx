@@ -1,6 +1,6 @@
 import React, { SetStateAction, ReactNode, useState } from 'react'
 import axios from 'axios'
-import { IAppointment, IDateSubmitted } from '../interfaces/Interfaces'
+import { IAppointment, IDateSubmitted, IUser } from '../interfaces/Interfaces'
 import { formatFullDateTime } from '../helpers/Helpers'
 
 interface ModalProps {
@@ -9,6 +9,7 @@ interface ModalProps {
   setDateSubmitted: React.Dispatch<SetStateAction<IDateSubmitted>>
   selectedTime: ReactNode
   appointments: IAppointment[]
+  owner: IUser
 }
 
 export default function Modal({
@@ -17,8 +18,11 @@ export default function Modal({
   selectedTime,
   appointments,
   setDateSubmitted,
+  owner,
 }: ModalProps) {
   const apts = [...appointments]
+
+  // I have hard coded the user's data below, but these would be accessed by decoding a token on the frontend when the user clicks the invite link and then authenticates
   const user = {
     userId: '3f82018e43b87fa066320d6f',
     name: 'Dave User',
@@ -33,6 +37,7 @@ export default function Modal({
     message: string
   }
 
+  // the function that executes on the onclick listener updates the specific appointment with the user details, and then sends a put request to update the specific calendar they are viewing
   const handleConfirmClick = () => {
     const updatedAppointment = apts.map((apt) => {
       return String(apt.startDateTime) === selectedTime
@@ -42,7 +47,7 @@ export default function Modal({
     const updateAppointment = async () => {
       try {
         await axios.put(
-          'https://scheduling-tool.free.mockoapp.net/calendars/ae82018e43b37fa077320d6f',
+          `https://scheduling-tool.free.mockoapp.net/calendars/${owner._id}`,
           updatedAppointment
         )
         setShowModal(false)
@@ -59,6 +64,7 @@ export default function Modal({
 
   return (
     <>
+      {/* The modal is conditionally rendered depending on state, which is updated via the button click */}
       {showModal ? (
         <>
           <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
@@ -71,11 +77,7 @@ export default function Modal({
                   <button
                     className='p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
                     onClick={() => setShowModal(false)}
-                  >
-                    <span className='bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none'>
-                      ×
-                    </span>
-                  </button>
+                  ></button>
                 </div>
                 <div className='relative p-6 flex-auto'>
                   <p className='my-4 text-slate-500 text-lg leading-relaxed'>
