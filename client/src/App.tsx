@@ -82,7 +82,7 @@ function App() {
                   <img
                     src={calendar.owner.imageURL}
                     alt={calendar.owner.name}
-                    className='rounded-full w-20 shadow-md mr-4 border-2'
+                    className='rounded-full shadow-md mr-4 border-2 md:w-20'
                   />
                   <div className='flex flex-col grow justify-between'>
                     <h3>Find a day that {calendar.owner.name} is available</h3>
