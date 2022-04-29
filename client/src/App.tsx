@@ -71,7 +71,7 @@ function App() {
   }
 
   return (
-    <div className='pt-20'>
+    <div className='p-5 lg:pt-20'>
       <div className='max-w-2xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden md:max-w-5xl p-8 flex flex-col'>
         {/* Here there is conditional rendering - once a date has been confirmed, the UI changes to a success message */}
         {!dateSubmitted.submitted ? (
@@ -136,35 +136,37 @@ function App() {
               )}
             </div>
             <hr className='border' />
-            <div className='flex md:flex-col lg:flex-row justify-between py-6'>
+            <div className='flex flex-col lg:flex-row justify-between py-6'>
               <div className='flex flex-col order-1'>
                 <h3 className='mb-3'>Book a 1 hour meeting</h3>
                 <p className='font-semibold mb-3'>
                   Select an available time below to book:
                 </p>
-                {filteredAppointments.length ? (
-                  filteredAppointments.map((apt: IAppointment) => {
-                    return (
-                      <button
-                        key={apt.id}
-                        id={String(apt.startDateTime)}
-                        className='shadow-sm mb-2 bg-green-500 py-2 px-4 rounded-sm flex justify-center hover:bg-sky-700 rounded cursor-pointer'
-                        onClick={handleTimeClick}
-                        type='button'
-                        data-modal-toggle='defaultModal'
-                      >
-                        {formatTimeString(String(apt.startDateTime))} &#8211;{' '}
-                        {formatTimeString(String(apt.endDateTime))}
-                      </button>
-                    )
-                  })
-                ) : (
-                  <p className='mt-4'>
-                    Sorry, no appointments available on this day!
-                  </p>
-                )}
+                <div className='flex flex-col items-stretch md:items-center lg:items-stretch'>
+                  {filteredAppointments.length ? (
+                    filteredAppointments.map((apt: IAppointment) => {
+                      return (
+                        <button
+                          key={apt.id}
+                          id={String(apt.startDateTime)}
+                          className='shadow-sm mb-2 bg-green-500 py-2 px-14 rounded-sm flex justify-center hover:bg-sky-700 rounded cursor-pointer max-w-none md:max-w-xs lg:max-w-none'
+                          onClick={handleTimeClick}
+                          type='button'
+                          data-modal-toggle='defaultModal'
+                        >
+                          {formatTimeString(String(apt.startDateTime))} &#8211;{' '}
+                          {formatTimeString(String(apt.endDateTime))}
+                        </button>
+                      )
+                    })
+                  ) : (
+                    <p className='mt-4'>
+                      Sorry, no appointments available on this day!
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className='flex flex-col order-2'>
+              <div className='flex flex-col items-center pt-4 lg:pt-0 order-2'>
                 <DatePicker
                   setSelectedDate={setSelectedDate}
                   appointments={calendar.appointments}
