@@ -59,7 +59,10 @@ function App() {
 
   // This filters the users appointments, to display on those available for the day that the user has clicked on and which are in the future
   useEffect(() => {
-    const availableApts = calendar.appointments.filter((apt) => {
+    const futureDates = calendar.appointments.filter((apt) => {
+      return new Date(apt.startDateTime) > new Date()
+    })
+    const availableApts = futureDates.filter((apt) => {
       return (
         new Date(apt.startDateTime).toLocaleDateString() ===
           selectedDate.toLocaleDateString() && !Object.keys(apt.attendee).length

@@ -12,12 +12,14 @@ export default function DatePicker({
   setSelectedDate,
   appointments,
 }: DatePickerProps) {
+  // This checks that only appointments in the future are used for the calendar
   const futureAppointments = appointments.filter((apt) => {
     return !(
-      new Date(apt.startDateTime).toLocaleDateString() ===
+      new Date(apt.startDateTime) < new Date() ||
+      (new Date(apt.startDateTime).toLocaleDateString() ===
         new Date().toLocaleDateString() &&
-      new Date(apt.startDateTime).toLocaleTimeString() <
-        new Date().toLocaleTimeString()
+        new Date(apt.startDateTime).toLocaleTimeString() <
+          new Date().toLocaleTimeString())
     )
   })
   const datesOnly = futureAppointments.map((apt) => apt.startDateTime)
