@@ -1,5 +1,5 @@
 export interface IAppointment {
-  id: number
+  _id: number
   startDateTime: Date
   endDateTime: Date
   attendee: {}

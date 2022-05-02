@@ -7,7 +7,11 @@ import {
   ICalendar,
   IDateSubmitted,
 } from './interfaces/Interfaces'
-import { formatFullDateTime, formatTimeString } from './helpers/Helpers'
+import {
+  formatFullDateTime,
+  formatTimeString,
+  formatDateOnly,
+} from './helpers/Helpers'
 
 function App() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
@@ -53,15 +57,23 @@ function App() {
     getAppointments()
   }, [])
 
-  // This filters the users appointments, to display on those for the day that the user has clicked on
+  // This filters the users appointments, to display on those available for the day that the user has clicked on and which are in the future
   useEffect(() => {
-    const filteredApts = calendar.appointments.filter((apt) => {
+    const availableApts = calendar.appointments.filter((apt) => {
       return (
         new Date(apt.startDateTime).toLocaleDateString() ===
           selectedDate.toLocaleDateString() && !Object.keys(apt.attendee).length
       )
     })
-    setFilteredAppointments(filteredApts)
+    if (selectedDate.toLocaleDateString() === new Date().toLocaleDateString())
+      setFilteredAppointments(
+        availableApts.filter(
+          (apt) =>
+            new Date(apt.startDateTime).toLocaleTimeString() >
+            new Date().toLocaleTimeString()
+        )
+      )
+    else setFilteredAppointments(availableApts)
   }, [calendar, selectedDate])
 
   // This opens the modal when a user clicks on a time slot
@@ -142,12 +154,15 @@ function App() {
                 <p className='font-semibold mb-3'>
                   Select an available time below to book:
                 </p>
+                <p className='mt-6 mb-4 text-center'>
+                  {formatDateOnly(selectedDate)}
+                </p>
                 <div className='flex flex-col items-stretch md:items-center lg:items-stretch'>
                   {filteredAppointments.length ? (
                     filteredAppointments.map((apt: IAppointment) => {
                       return (
                         <button
-                          key={apt.id}
+                          key={apt._id}
                           id={String(apt.startDateTime)}
                           className='shadow-sm mb-2 bg-green-500 py-2 px-14 rounded-sm flex justify-center hover:bg-sky-700 rounded cursor-pointer max-w-none md:max-w-xs lg:max-w-none'
                           onClick={handleTimeClick}
@@ -183,11 +198,30 @@ function App() {
             />
           </>
         ) : (
-          <div className='p-4'>
-            <h3 className='mb-6'>Success!</h3>
-            <p>{`Your appointment has been confirmed for ${formatFullDateTime(
-              String(dateSubmitted.date)
-            )}`}</p>
+          <div className='p-4 flex'>
+            <div className='grow'>
+              <h3 className='mb-4'>Success!</h3>
+              <p>
+                Your appointment has been confirmed for{' '}
+                {formatFullDateTime(String(dateSubmitted.date))}
+              </p>
+            </div>
+            <div className='w-40 flex flex-col justify-center items-center'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-14 w-14 text-green-500 '
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z'
+                />
+              </svg>
+            </div>
           </div>
         )}
       </div>

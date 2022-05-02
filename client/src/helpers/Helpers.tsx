@@ -12,3 +12,12 @@ export const formatFullDateTime = (input: string) => {
     day: 'numeric',
   })} ${formatTimeString(input)}`
 }
+
+export const formatDateOnly = (input: Date) => {
+  return input.toLocaleDateString('en-gb', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+}

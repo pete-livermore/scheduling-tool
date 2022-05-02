@@ -12,7 +12,15 @@ export default function DatePicker({
   setSelectedDate,
   appointments,
 }: DatePickerProps) {
-  const datesOnly = appointments.map((apt) => apt.startDateTime)
+  const futureAppointments = appointments.filter((apt) => {
+    return !(
+      new Date(apt.startDateTime).toLocaleDateString() ===
+        new Date().toLocaleDateString() &&
+      new Date(apt.startDateTime).toLocaleTimeString() <
+        new Date().toLocaleTimeString()
+    )
+  })
+  const datesOnly = futureAppointments.map((apt) => apt.startDateTime)
   return (
     <Calendar
       // This function selects a date when a user clicks on a calendar tile
@@ -22,13 +30,13 @@ export default function DatePicker({
       // This adds a class to the tiles corresponding to dates where there are appointments available
       tileClassName={({ date }) => {
         if (
-          datesOnly.find(
+          datesOnly.some(
             (item) =>
               new Date(item).toLocaleDateString() === date.toLocaleDateString()
           )
-        ) {
-          return 'bg-green-500 px-2 hover:bg-green-600 cursor-pointer active:text-white'
-        } else return null
+        )
+          return 'bg-green-400 px-2 hover:bg-green-600 cursor-pointer active:text-white'
+        else return ''
       }}
     />
   )

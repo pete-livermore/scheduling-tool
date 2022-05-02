@@ -39,21 +39,24 @@ export default function Modal({
 
   // the function that executes on the onclick listener updates the specific appointment with the user details, and then sends a put request to update the specific calendar they are viewing
   const handleConfirmClick = () => {
-    const updatedAppointment = apts.map((apt) => {
-      return String(apt.startDateTime) === selectedTime
-        ? { ...apt, attendee: user }
-        : apt
-    })
+    console.log(selectedTime)
+    console.log(apts[0].startDateTime)
+    const indexToUpdate = apts.findIndex(
+      (apt) => String(apt.startDateTime) === selectedTime
+    )
+    apts[indexToUpdate] = { ...apts[indexToUpdate], attendee: user }
+    console.log(apts[indexToUpdate])
+    console.log(apts)
     const updateAppointment = async () => {
       try {
         await axios.put(
           `https://scheduling-tool.free.mockoapp.net/calendars/${owner._id}`,
-          updatedAppointment
+          apts
         )
         setShowModal(false)
         setDateSubmitted({
           submitted: true,
-          date: updatedAppointment[0].startDateTime,
+          date: apts[indexToUpdate].startDateTime,
         })
       } catch (err: any) {
         setError({ error: true, message: err.message })
@@ -93,7 +96,7 @@ export default function Modal({
                     Close
                   </button>
                   <button
-                    className='bg-green-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                    className='bg-green-500 text-white active:bg-green-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                     type='button'
                     onClick={handleConfirmClick}
                   >
