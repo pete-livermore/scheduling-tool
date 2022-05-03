@@ -37,7 +37,7 @@ export default function DatePicker({
               new Date(item).toLocaleDateString() === date.toLocaleDateString()
           )
         )
-          return 'bg-green-400 px-2 hover:bg-green-600 cursor-pointer active:text-white'
+          return 'bg-emerald-400 text-white text-bold px-2 hover:bg-emerald-600 cursor-pointer active:text-white'
         else return ''
       }}
     />
