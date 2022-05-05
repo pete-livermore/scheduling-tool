@@ -39,14 +39,10 @@ export default function Modal({
 
   // the function that executes on the onclick listener updates the specific appointment with the user details, and then sends a put request to update the specific calendar they are viewing
   const handleConfirmClick = () => {
-    console.log(selectedTime)
-    console.log(apts[0].startDateTime)
     const indexToUpdate = apts.findIndex(
       (apt) => String(apt.startDateTime) === selectedTime
     )
     apts[indexToUpdate] = { ...apts[indexToUpdate], attendee: user }
-    console.log(apts[indexToUpdate])
-    console.log(apts)
     const updateAppointment = async () => {
       try {
         await axios.put(

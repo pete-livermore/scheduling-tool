@@ -68,15 +68,7 @@ function App() {
           selectedDate.toLocaleDateString() && !Object.keys(apt.attendee).length
       )
     })
-    if (selectedDate.toLocaleDateString() === new Date().toLocaleDateString())
-      setFilteredAppointments(
-        availableApts.filter(
-          (apt) =>
-            new Date(apt.startDateTime).toLocaleTimeString() >
-            new Date().toLocaleTimeString()
-        )
-      )
-    else setFilteredAppointments(availableApts)
+    setFilteredAppointments(availableApts)
   }, [calendar, selectedDate])
 
   // This opens the modal when a user clicks on a time slot
